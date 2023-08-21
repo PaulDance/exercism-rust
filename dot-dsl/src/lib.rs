@@ -62,7 +62,7 @@ pub mod graph {
             self
         }
 
-        pub fn get_node(&self, id: &str) -> Option<&Node> {
+        pub fn node(&self, id: &str) -> Option<&Node> {
             self.nodes.iter().find(|&node| node.id == id)
         }
     }
@@ -92,8 +92,8 @@ pub mod graph {
                     self
                 }
 
-                pub fn get_attr(&self, attr: &str) -> Option<&str> {
-                    self.attrs.get(&attr.to_string()).map(|s| s.as_str())
+                pub fn attr(&self, attr: &str) -> Option<&str> {
+                    self.attrs.get(attr).map(String::as_str)
                 }
             }
         }
@@ -120,6 +120,10 @@ pub mod graph {
                 pub fn with_attrs(mut self, attrs: &[(&str, &str)]) -> Self {
                     self.attrs = collect_attrs(attrs);
                     self
+                }
+
+                pub fn attr(&self, attr: &str) -> Option<&str> {
+                    self.attrs.get(attr).map(String::as_str)
                 }
             }
         }
