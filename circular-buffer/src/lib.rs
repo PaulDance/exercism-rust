@@ -1,5 +1,3 @@
-#![feature(slice_fill)]
-
 use std::vec;
 
 #[derive(Debug)]
