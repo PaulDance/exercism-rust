@@ -1,7 +1,7 @@
-use chrono::{DateTime, Utc};
 use time::Duration;
+use time::PrimitiveDateTime as DateTime;
 
 /// Returns a Utc DateTime one billion seconds after start.
-pub fn after(start: DateTime<Utc>) -> DateTime<Utc> {
+pub fn after(start: DateTime) -> DateTime {
     start + Duration::seconds(1_000_000_000)
 }
