@@ -1,12 +1,9 @@
-use anagram;
-
 use std::collections::HashSet;
-use std::iter::FromIterator;
 
 fn process_anagram_case(word: &str, inputs: &[&str], expected: &[&str]) {
     let result = anagram::anagrams_for(word, inputs);
 
-    let expected: HashSet<&str> = HashSet::from_iter(expected.iter().cloned());
+    let expected: HashSet<&str> = expected.iter().cloned().collect();
 
     assert_eq!(result, expected);
 }
@@ -109,8 +106,8 @@ fn test_unicode_anagrams() {
 
 #[test]
 fn test_misleading_unicode_anagrams() {
-    // Despite what a human might think these words different letters, the input uses Greek A and B
-    // while the list of potential anagrams uses Latin A and B.
+    // Despite what a human might think these words contain different letters, the input uses Greek
+    // A and B while the list of potential anagrams uses Latin A and B.
     let word = "ΑΒΓ";
 
     let inputs = ["ABΓ"];
@@ -158,6 +155,17 @@ fn test_same_bytes_different_chars() {
     let word = "a⬂"; // 61 E2 AC 82
 
     let inputs = ["€a"]; // E2 82 AC 61
+
+    let outputs = vec![];
+
+    process_anagram_case(word, &inputs, &outputs);
+}
+
+#[test]
+fn test_different_words_but_same_ascii_sum() {
+    let word = "bc";
+
+    let inputs = ["ad"];
 
     let outputs = vec![];
 
