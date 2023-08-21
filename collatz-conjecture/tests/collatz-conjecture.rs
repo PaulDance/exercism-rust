@@ -24,3 +24,21 @@ fn test_1000000() {
 fn test_0() {
     assert_eq!(None, collatz(0));
 }
+
+#[test]
+fn test_110243094271() {
+    let val = 110243094271;
+    assert_eq!(None, collatz(val));
+}
+
+#[test]
+fn test_max_div_3() {
+    let max = u64::MAX / 3;
+    assert_eq!(None, collatz(max));
+}
+
+#[test]
+fn test_max_minus_1() {
+    let max = u64::MAX - 1;
+    assert_eq!(None, collatz(max));
+}

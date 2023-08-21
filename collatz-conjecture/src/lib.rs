@@ -7,13 +7,13 @@ pub fn collatz(mut n: u64) -> Option<u64> {
         let mut steps = 0;
 
         while n != 1 {
-            if n % 2 == 0 {
+            if n & 1 == 0 {
                 n /= 2;
+                steps += 1;
             } else {
-                n = 3 * n + 1;
+                n = n.checked_mul(3)?.checked_add(1)? / 2;
+                steps += 2;
             }
-
-            steps += 1;
         }
 
         Some(steps)
