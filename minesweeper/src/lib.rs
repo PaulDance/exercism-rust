@@ -33,7 +33,7 @@ fn neighbors(
 /// Panics if `minefield` is empty.
 fn count_mines(i: usize, j: usize, minefield: &[&str]) -> u8 {
     neighbors(i, j, minefield.len(), minefield[0].len())
-        .filter(|&(ni, nj)| minefield[ni].as_bytes()[nj] == MINE_CHAR as u8)
+        .filter(|&(ni, nj)| minefield[ni].chars().nth(nj).unwrap() == MINE_CHAR)
         .count() as u8
 }
 
@@ -50,10 +50,10 @@ pub fn annotate(minefield: &[&str]) -> Vec<String> {
     minefield
         .iter()
         .enumerate()
-        .map(|(i, line)| {
-            line.chars()
+        .map(|(i, s)| {
+            s.chars()
                 .enumerate()
-                .map(|(j, chr)| match chr {
+                .map(|(j, c)| match c {
                     MINE_CHAR => MINE_CHAR,
                     _ => make_annotation(i, j, minefield),
                 })
