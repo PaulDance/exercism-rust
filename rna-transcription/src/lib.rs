@@ -1,22 +1,22 @@
 #[derive(Debug, PartialEq)]
-pub struct DNA {
+pub struct Dna {
     seq: String,
 }
 
 #[derive(Debug, PartialEq)]
-pub struct RNA {
+pub struct Rna {
     seq: String,
 }
 
-impl DNA {
-    pub fn new(dna: &str) -> Result<DNA, usize> {
+impl Dna {
+    pub fn new(dna: &str) -> Result<Dna, usize> {
         Ok(Self {
             seq: Self::validate_sequence(dna)?,
         })
     }
 
-    pub fn into_rna(self) -> RNA {
-        RNA::new(&self.seq.chars().map(Self::nuc_to_rna).collect::<String>()).unwrap()
+    pub fn into_rna(self) -> Rna {
+        Rna::new(&self.seq.chars().map(Self::nuc_to_rna).collect::<String>()).unwrap()
     }
 
     pub fn nuc_to_rna(nucleotide: char) -> char {
@@ -30,8 +30,8 @@ impl DNA {
     }
 }
 
-impl RNA {
-    pub fn new(rna: &str) -> Result<RNA, usize> {
+impl Rna {
+    pub fn new(rna: &str) -> Result<Rna, usize> {
         Ok(Self {
             seq: Self::validate_sequence(rna)?,
         })
@@ -63,10 +63,10 @@ pub trait ValidateGenetics {
     }
 }
 
-impl ValidateGenetics for DNA {
+impl ValidateGenetics for Dna {
     const NUCLEOTIDES: &'static str = "ATCG";
 }
 
-impl ValidateGenetics for RNA {
+impl ValidateGenetics for Rna {
     const NUCLEOTIDES: &'static str = "AUCG";
 }
