@@ -4,7 +4,7 @@ use sublist::{sublist, Comparison};
 fn empty_equals_empty() {
     let v: &[u32] = &[];
 
-    assert_eq!(Comparison::Equal, sublist(&v, &v));
+    assert_eq!(Comparison::Equal, sublist(v, v));
 }
 
 #[test]
@@ -79,6 +79,11 @@ fn superlist_in_middle() {
 #[test]
 fn superlist_at_end() {
     assert_eq!(Comparison::Superlist, sublist(&[1, 2, 3, 4, 5], &[3, 4, 5]));
+}
+
+#[test]
+fn second_list_missing_element_from_first_list() {
+    assert_eq!(Comparison::Unequal, sublist(&[1, 2, 3], &[1, 3]));
 }
 
 #[test]
