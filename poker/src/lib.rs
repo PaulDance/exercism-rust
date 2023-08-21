@@ -5,7 +5,7 @@ use itertools::Itertools;
 use std::cmp::Ordering;
 
 /// Given a list of poker hands, returns a list of those hands which win.
-pub fn winning_hands<'a>(hands: &[&'a str]) -> Option<Vec<&'a str>> {
+pub fn winning_hands<'a>(hands: &[&'a str]) -> Vec<&'a str> {
     // Extract hands and save references to the strings.
     let mut built_hands = hands.iter().map(|&hand| Hand::from(hand)).collect_vec();
     // Sort them in reverse order: notice x and y and swapped.
@@ -13,13 +13,11 @@ pub fn winning_hands<'a>(hands: &[&'a str]) -> Option<Vec<&'a str>> {
 
     // Return the equivalent hands, starting from the highest ranks.
     let top = built_hands[0].clone();
-    Some(
-        built_hands
-            .into_iter()
-            .take_while(|hand| hand.partial_cmp(&top) == Some(Ordering::Equal))
-            .map(|hand| hand.string)
-            .collect(),
-    )
+    built_hands
+        .into_iter()
+        .take_while(|hand| hand.partial_cmp(&top) == Some(Ordering::Equal))
+        .map(|hand| hand.string)
+        .collect()
 }
 
 /// Represents a poker card. Adds a bit of abstraction.

@@ -14,16 +14,19 @@ fn hs_from<'a>(input: &[&'a str]) -> HashSet<&'a str> {
 ///
 /// Note that the output can be in any order. Here, we use a HashSet to
 /// abstract away the order of outputs.
-fn test<'a, 'b>(input: &[&'a str], expected: &[&'b str]) {
-    assert_eq!(
-        hs_from(&winning_hands(input).expect("This test should produce Some value",)),
-        hs_from(expected)
-    )
+fn test(input: &[&str], expected: &[&str]) {
+    assert_eq!(hs_from(&winning_hands(input)), hs_from(expected))
 }
 
 #[test]
 fn test_single_hand_always_wins() {
     test(&["4S 5S 7H 8D JC"], &["4S 5S 7H 8D JC"])
+}
+
+#[test]
+fn test_duplicate_hands_always_tie() {
+    let input = &["3S 4S 5D 6H JH", "3S 4S 5D 6H JH", "3S 4S 5D 6H JH"];
+    assert_eq!(&winning_hands(input), input)
 }
 
 #[test]
@@ -101,6 +104,11 @@ fn test_three_of_a_kind_ranks() {
 }
 
 #[test]
+fn test_low_three_of_a_kind_beats_high_two_pair() {
+    test(&["2H 2D 2C 8H 5H", "AS AC KS KC 6S"], &["2H 2D 2C 8H 5H"])
+}
+
+#[test]
 fn test_three_of_a_kind_cascade_ranks() {
     // with multiple decks, two players can have same three of a kind,
     // ties go to highest remaining cards
@@ -119,13 +127,19 @@ fn test_aces_can_end_a_straight_high() {
 }
 
 #[test]
-fn test_aces_can_end_a_straight_low() {
+fn test_aces_can_start_a_straight_low() {
     // aces can start a straight (A 2 3 4 5)
     test(&["4S 5H 4C 8D 4H", "4D AH 3S 2D 5C"], &["4D AH 3S 2D 5C"])
 }
 
 #[test]
-fn test_straight_cascade() {
+fn test_no_ace_in_middle_of_straight() {
+    // aces cannot be in the middle of a straight (Q K A 2 3)
+    test(&["2C 3D 7H 5H 2S", "QS KH AC 2D 3S"], &["2C 3D 7H 5H 2S"])
+}
+
+#[test]
+fn test_straight_ranks() {
     // both hands with a straight, tie goes to highest ranked card
     test(&["4S 6C 7S 8D 5H", "5S 7H 8S 9D 6H"], &["5S 7H 8S 9D 6H"])
 }
@@ -187,7 +201,31 @@ fn test_straight_flush_beats_four_of_a_kind() {
 }
 
 #[test]
+fn test_aces_can_end_a_straight_flush_high() {
+    // aces can end a straight flush (10 J Q K A)
+    test(&["KC AH AS AD AC", "10C JC QC KC AC"], &["10C JC QC KC AC"])
+}
+
+#[test]
+fn test_aces_can_start_a_straight_flush_low() {
+    // aces can start a straight flush (A 2 3 4 5)
+    test(&["KS AH AS AD AC", "4H AH 3H 2H 5H"], &["4H AH 3H 2H 5H"])
+}
+
+#[test]
+fn test_no_ace_in_middle_of_straight_flush() {
+    // aces cannot be in the middle of a straight flush (Q K A 2 3)
+    test(&["2C AC QC 10C KC", "QH KH AH 2H 3H"], &["2C AC QC 10C KC"])
+}
+
+#[test]
 fn test_straight_flush_ranks() {
-    // both hands have straight flush, tie goes to highest-ranked card
+    // both hands have a straight flush, tie goes to highest-ranked card
     test(&["4H 6H 7H 8H 5H", "5S 7S 8S 9S 6S"], &["5S 7S 8S 9S 6S"])
+}
+
+#[test]
+fn test_straight_flush_scoring() {
+    // even though an ace is usually high, a 5-high straight flush is the lowest-scoring straight flush
+    test(&["2H 3H 4H 5H 6H", "4D AD 3D 2D 5D"], &["2H 3H 4H 5H 6H"])
 }
