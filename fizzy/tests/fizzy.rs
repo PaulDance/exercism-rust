@@ -34,7 +34,7 @@ fn test_nonsequential() {
         "fizz", "fizz", "fizz", "buzz", "buzz", "16", "8", "4", "2", "1",
     ];
     let got = fizz_buzz::<i32>()
-        .apply(collatz_12.into_iter().cloned())
+        .apply(collatz_12.iter().cloned())
         .collect::<Vec<_>>();
     assert_eq!(expect, got);
 }
@@ -86,7 +86,7 @@ fn test_minimal_generic_bounds() {
     impl fmt::Display for Fizzable {
         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
             let Fizzable(ref n) = self;
-            write!(f, "{}", n)
+            write!(f, "{n}")
         }
     }
 
