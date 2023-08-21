@@ -1,4 +1,3 @@
-use alphametics;
 use std::collections::HashMap;
 
 fn assert_alphametic_solution_eq(puzzle: &str, solution: &[(char, u8)]) {
@@ -21,6 +20,12 @@ fn test_must_have_unique_value_for_each_letter() {
 #[test]
 fn test_leading_zero_solution_is_invalid() {
     let answer = alphametics::solve("ACA + DD == BD");
+    assert_eq!(answer, None);
+}
+
+#[test]
+fn test_sum_must_be_wide_enough() {
+    let answer = alphametics::solve("ABC + DEF == GH");
     assert_eq!(answer, None);
 }
 

@@ -1,6 +1,7 @@
+use std::collections::HashMap;
+
 use itertools::Itertools;
 use permutohedron::Heap;
-use std::collections::HashMap;
 
 struct Formula {
     equation_lhs: Vec<String>,
