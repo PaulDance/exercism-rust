@@ -5,29 +5,21 @@ use std::collections::HashMap;
 pub struct Palindrome {
     /// Product of first decomposition received.
     value: u64,
-    /// Two-Factor Decompositions of the Palindrome.
-    tfd: Vec<(u64, u64)>,
 }
 
 impl Palindrome {
     /// Builds a `Palindrome` from the given two-factor decomposition.
-    pub fn new(a: u64, b: u64) -> Self {
-        Self {
-            value: a * b,
-            tfd: vec![(a, b)],
-        }
+    fn from_tfd(a: u64, b: u64) -> Self {
+        Self { value: a * b }
+    }
+
+    pub fn new(n: u64) -> Option<Self> {
+        n.is_palindrome().then(|| Self { value: n })
     }
 
     /// Returns the numerical value of the palindrome.
-    pub fn value(&self) -> u64 {
+    pub fn into_inner(&self) -> u64 {
         self.value
-    }
-
-    /// Adds a new two-factor decomposition to the palindrome only if it is not already present.
-    pub fn insert(&mut self, a: u64, b: u64) {
-        if !self.tfd.contains(&(a, b)) {
-            self.tfd.push((a, b));
-        }
     }
 }
 
@@ -74,15 +66,13 @@ pub fn palindrome_products(min: u64, max: u64) -> Option<(Palindrome, Palindrome
         .filter(|(p, _)| p.is_palindrome())
     {
         if !map.contains_key(&p) {
-            map.insert(p, Palindrome::new(i, j));
-        } else {
-            map.get_mut(&p).unwrap().insert(i, j);
+            map.insert(p, Palindrome::from_tfd(i, j));
         }
     }
 
     // then find the potential min and max among them.
-    let min_min = &Palindrome::new(0, 0);
-    let max_max = &Palindrome::new(1, u64::MAX);
+    let min_min = &Palindrome::from_tfd(0, 0);
+    let max_max = &Palindrome::from_tfd(1, u64::MAX);
     let mut min = max_max;
     let mut max = min_min;
 
