@@ -75,8 +75,8 @@ fn test_input_digit_9_is_correctly_converted_to_output_digit_9() {
 }
 
 #[test]
-/// using ascii value for doubled non-digit isn't allowed
-/// Convert non-digits to their ascii values and then offset them by 48 sometimes accidentally declare an invalid string to be valid.
+/// using ASCII value for doubled non-digit isn't allowed
+/// Convert non-digits to their ASCII values and then offset them by 48 sometimes accidentally declare an invalid string to be valid.
 /// This test is designed to avoid that solution.
 fn test_using_ascii_value_for_doubled_nondigit_isnt_allowed() {
     process_valid_case(":9", false);
@@ -95,8 +95,8 @@ fn test_valid_strings_with_symbols_included_become_invalid() {
 }
 
 #[test]
-/// using ascii value for non-doubled non-digit isn't allowed
-/// Convert non-digits to their ascii values and then offset them by 48 sometimes accidentally declare an invalid string to be valid.
+/// using ASCII value for non-doubled non-digit isn't allowed
+/// Convert non-digits to their ASCII values and then offset them by 48 sometimes accidentally declare an invalid string to be valid.
 /// This test is designed to avoid that solution.
 fn test_using_ascii_value_for_nondoubled_nondigit_isnt_allowed() {
     process_valid_case("055b 444 285", false);
@@ -106,4 +106,16 @@ fn test_using_ascii_value_for_nondoubled_nondigit_isnt_allowed() {
 /// valid number with an odd number of spaces
 fn test_valid_number_with_an_odd_number_of_spaces() {
     process_valid_case("234 567 891 234", true);
+}
+
+#[test]
+/// non-numeric, non-space char in the middle with a sum that's divisible by 10 isn't allowed
+fn test_invalid_char_in_middle_with_sum_divisible_by_10_isnt_allowed() {
+    process_valid_case("59%59", false);
+}
+
+#[test]
+/// unicode numeric characters are not allowed in a otherwise valid number
+fn test_valid_strings_with_numeric_unicode_characters_become_invalid() {
+    process_valid_case("1249①", false);
 }
