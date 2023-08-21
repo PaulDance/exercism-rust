@@ -75,6 +75,7 @@ impl Scale {
                 % 12;
         }
 
+        pitches.push(pitches[0].clone());
         Ok(Scale { pitches })
     }
 
