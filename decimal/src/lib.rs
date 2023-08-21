@@ -63,9 +63,9 @@ impl Decimal {
     }
 }
 
-///     e1 >= e2
-/// =>  m1 * 10^-e1 + m2 * 10^-e2
-///  =  10^-e1 * (m1 + m2 * 10^(e1-e2))
+//     e1 >= e2
+// =>  m1 * 10^-e1 + m2 * 10^-e2
+//  =  10^-e1 * (m1 + m2 * 10^(e1-e2))
 impl Add<Self> for Decimal {
     type Output = Self;
 
@@ -80,8 +80,8 @@ impl Add<Self> for Decimal {
     }
 }
 
-///   -(m * 10^-e)
-/// = -m * 10^-e
+//   -(m * 10^-e)
+// = -m * 10^-e
 impl Neg for Decimal {
     type Output = Self;
 
@@ -92,8 +92,8 @@ impl Neg for Decimal {
     }
 }
 
-///   x - y
-/// = x + -y
+//   x - y
+// = x + -y
 impl Sub<Self> for Decimal {
     type Output = Self;
 
@@ -103,8 +103,8 @@ impl Sub<Self> for Decimal {
     }
 }
 
-///   (m1 * 10^-e1) * (m2 * 10^-e2)
-/// = (m1 * m2) * 10^-(m1 + m2)
+//   (m1 * 10^-e1) * (m2 * 10^-e2)
+// = (m1 * m2) * 10^-(m1 + m2)
 impl Mul<Self> for Decimal {
     type Output = Self;
 
@@ -119,8 +119,8 @@ impl Mul<Self> for Decimal {
     }
 }
 
-///      m1 * 10^-e1 <= m2 * 10^-e2
-/// <=>  m1 * 10^e2 <= m2 * 10^e1
+//      m1 * 10^-e1 <= m2 * 10^-e2
+// <=>  m1 * 10^e2 <= m2 * 10^e1
 impl PartialOrd for Decimal {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         if self.mant.sign() != other.mant.sign() {

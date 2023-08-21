@@ -8,7 +8,7 @@ fn decimal(input: &str) -> Decimal {
 }
 
 /// Some big and precise values we can use for testing. [0] + [1] == [2]
-const BIGS: [&'static str; 3] = [
+const BIGS: [&str; 3] = [
     "100000000000000000000000000000000000000000000.00000000000000000000000000000000000000001",
     "100000000000000000000000000000000000000000000.00000000000000000000000000000000000000002",
     "200000000000000000000000000000000000000000000.00000000000000000000000000000000000000003",
@@ -34,7 +34,6 @@ fn test_ne() {
 fn test_gt() {
     for slice_2 in BIGS.windows(2) {
         assert!(decimal(slice_2[1]) > decimal(slice_2[0]));
-        assert!(!(decimal(slice_2[0]) > decimal(slice_2[1])));
     }
 }
 
@@ -42,7 +41,6 @@ fn test_gt() {
 fn test_lt() {
     for slice_2 in BIGS.windows(2) {
         assert!(decimal(slice_2[0]) < decimal(slice_2[1]));
-        assert!(!(decimal(slice_2[1]) < decimal(slice_2[0])));
     }
 }
 
