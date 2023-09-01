@@ -1,0 +1,12 @@
+[package]
+edition = "2021"
+name = "react"
+version = "2.0.0"
+
+[dependencies]
+derive-where = "~1.2.3"
+enum-assoc = "~1.1.0"
+
+[dependencies.derive_more]
+version = "~1.0.0-beta.3"
+features = ["from", "unwrap", "is_variant", "display", "error"]
