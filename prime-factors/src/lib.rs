@@ -1,12 +1,14 @@
-pub fn factors(n: u64) -> Vec<u64> {
-    let mut x = n;
+pub fn factors(mut n: u64) -> Vec<u64> {
     let mut factors = Vec::<u64>::new();
+    let mut k = 2;
 
-    for prime in (2..=(n as f64).sqrt() as u64 + 1).filter(|&p| (2..p).all(|q| p % q != 0)) {
-        while x % prime == 0 {
-            factors.push(prime);
-            x /= prime;
+    while n > 1 {
+        while n % k == 0 {
+            factors.push(k);
+            n /= k;
         }
+
+        k += 1;
     }
 
     factors
