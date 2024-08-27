@@ -1,108 +1,186 @@
-use std::collections::HashMap;
+use word_count::*;
 
-use word_count;
-
-fn check_word_count(s: &str, pairs: &[(&str, u32)]) {
-    // The reason for the awkward code in here is to ensure that the failure
-    // message for assert_eq! is as informative as possible. A simpler
-    // solution would simply check the length of the map, and then
-    // check for the presence and value of each key in the given pairs vector.
-    let mut m: HashMap<String, u32> = word_count::word_count(s);
-    for &(k, v) in pairs.iter() {
-        assert_eq!((k, m.remove(&k.to_string()).unwrap_or(0)), (k, v));
+#[test]
+fn count_one_word() {
+    let input = "word";
+    let mut output = word_count(input);
+    let expected = [("word", 1)];
+    for (word, count) in expected {
+        assert_eq!((word, output.remove(word).unwrap_or(0)), (word, count));
     }
-    // may fail with a message that clearly shows all extra pairs in the map
-    assert_eq!(m.iter().collect::<Vec<(&String, &u32)>>(), vec![]);
+    assert_eq!(output.into_iter().collect::<Vec<_>>(), vec![]);
 }
 
 #[test]
-fn test_count_one_word() {
-    check_word_count("word", &[("word", 1)]);
+fn count_one_of_each_word() {
+    let input = "one of each";
+    let mut output = word_count(input);
+    let expected = [("one", 1), ("of", 1), ("each", 1)];
+    for (word, count) in expected {
+        assert_eq!((word, output.remove(word).unwrap_or(0)), (word, count));
+    }
+    assert_eq!(output.into_iter().collect::<Vec<_>>(), vec![]);
 }
 
 #[test]
-fn test_count_one_of_each() {
-    check_word_count("one of each", &[("one", 1), ("of", 1), ("each", 1)]);
+fn multiple_occurrences_of_a_word() {
+    let input = "one fish two fish red fish blue fish";
+    let mut output = word_count(input);
+    let expected = [("one", 1), ("fish", 4), ("two", 1), ("red", 1), ("blue", 1)];
+    for (word, count) in expected {
+        assert_eq!((word, output.remove(word).unwrap_or(0)), (word, count));
+    }
+    assert_eq!(output.into_iter().collect::<Vec<_>>(), vec![]);
 }
 
 #[test]
-fn test_count_multiple_occurrences() {
-    check_word_count(
-        "one fish two fish red fish blue fish",
-        &[("one", 1), ("fish", 4), ("two", 1), ("red", 1), ("blue", 1)],
-    );
+fn handles_cramped_lists() {
+    let input = "one,two,three";
+    let mut output = word_count(input);
+    let expected = [("one", 1), ("two", 1), ("three", 1)];
+    for (word, count) in expected {
+        assert_eq!((word, output.remove(word).unwrap_or(0)), (word, count));
+    }
+    assert_eq!(output.into_iter().collect::<Vec<_>>(), vec![]);
 }
 
 #[test]
-fn cramped_lists() {
-    check_word_count("one,two,three", &[("one", 1), ("two", 1), ("three", 1)]);
+fn handles_expanded_lists() {
+    let input = "one,\ntwo,\nthree";
+    let mut output = word_count(input);
+    let expected = [("one", 1), ("two", 1), ("three", 1)];
+    for (word, count) in expected {
+        assert_eq!((word, output.remove(word).unwrap_or(0)), (word, count));
+    }
+    assert_eq!(output.into_iter().collect::<Vec<_>>(), vec![]);
 }
 
 #[test]
-fn expanded_lists() {
-    check_word_count("one\ntwo\nthree", &[("one", 1), ("two", 1), ("three", 1)]);
+fn ignore_punctuation() {
+    let input = "car: carpet as java: javascript!!&@$%^&";
+    let mut output = word_count(input);
+    let expected = [
+        ("car", 1),
+        ("carpet", 1),
+        ("as", 1),
+        ("java", 1),
+        ("javascript", 1),
+    ];
+    for (word, count) in expected {
+        assert_eq!((word, output.remove(word).unwrap_or(0)), (word, count));
+    }
+    assert_eq!(output.into_iter().collect::<Vec<_>>(), vec![]);
 }
 
 #[test]
-fn test_ignore_punctuation() {
-    check_word_count(
-        "car : carpet as java : javascript!!&@$%^&",
-        &[
-            ("car", 1),
-            ("carpet", 1),
-            ("as", 1),
-            ("java", 1),
-            ("javascript", 1),
-        ],
-    );
+fn include_numbers() {
+    let input = "testing, 1, 2 testing";
+    let mut output = word_count(input);
+    let expected = [("testing", 2), ("1", 1), ("2", 1)];
+    for (word, count) in expected {
+        assert_eq!((word, output.remove(word).unwrap_or(0)), (word, count));
+    }
+    assert_eq!(output.into_iter().collect::<Vec<_>>(), vec![]);
 }
 
 #[test]
-fn test_include_numbers() {
-    check_word_count(
-        "testing, 1, 2 testing",
-        &[("testing", 2), ("1", 1), ("2", 1)],
-    );
-}
-
-#[test]
-fn test_normalize_case() {
-    check_word_count("go Go GO Stop stop", &[("go", 3), ("stop", 2)]);
+fn normalize_case() {
+    let input = "go Go GO Stop stop";
+    let mut output = word_count(input);
+    let expected = [("go", 3), ("stop", 2)];
+    for (word, count) in expected {
+        assert_eq!((word, output.remove(word).unwrap_or(0)), (word, count));
+    }
+    assert_eq!(output.into_iter().collect::<Vec<_>>(), vec![]);
 }
 
 #[test]
 fn with_apostrophes() {
-    check_word_count(
-        "First: don't laugh. Then: don't cry.",
-        &[
-            ("first", 1),
-            ("don't", 2),
-            ("laugh", 1),
-            ("then", 1),
-            ("cry", 1),
-        ],
-    );
+    let input = "'First: don't laugh. Then: don't cry. You're getting it.'";
+    let mut output = word_count(input);
+    let expected = [
+        ("first", 1),
+        ("don't", 2),
+        ("laugh", 1),
+        ("then", 1),
+        ("cry", 1),
+        ("you're", 1),
+        ("getting", 1),
+        ("it", 1),
+    ];
+    for (word, count) in expected {
+        assert_eq!((word, output.remove(word).unwrap_or(0)), (word, count));
+    }
+    assert_eq!(output.into_iter().collect::<Vec<_>>(), vec![]);
 }
 
 #[test]
 fn with_quotations() {
-    check_word_count(
-        "Joe can't tell between 'large' and large.",
-        &[
-            ("joe", 1),
-            ("can't", 1),
-            ("tell", 1),
-            ("between", 1),
-            ("large", 2),
-            ("and", 1),
-        ],
-    );
+    let input = "Joe can't tell between 'large' and large.";
+    let mut output = word_count(input);
+    let expected = [
+        ("joe", 1),
+        ("can't", 1),
+        ("tell", 1),
+        ("between", 1),
+        ("large", 2),
+        ("and", 1),
+    ];
+    for (word, count) in expected {
+        assert_eq!((word, output.remove(word).unwrap_or(0)), (word, count));
+    }
+    assert_eq!(output.into_iter().collect::<Vec<_>>(), vec![]);
+}
+
+#[test]
+fn substrings_from_the_beginning() {
+    let input = "Joe can't tell between app, apple and a.";
+    let mut output = word_count(input);
+    let expected = [
+        ("joe", 1),
+        ("can't", 1),
+        ("tell", 1),
+        ("between", 1),
+        ("app", 1),
+        ("apple", 1),
+        ("and", 1),
+        ("a", 1),
+    ];
+    for (word, count) in expected {
+        assert_eq!((word, output.remove(word).unwrap_or(0)), (word, count));
+    }
+    assert_eq!(output.into_iter().collect::<Vec<_>>(), vec![]);
 }
 
 #[test]
 fn multiple_spaces_not_detected_as_a_word() {
-    check_word_count(
-        " multiple   whitespaces",
-        &[("multiple", 1), ("whitespaces", 1)],
-    );
+    let input = " multiple   whitespaces";
+    let mut output = word_count(input);
+    let expected = [("multiple", 1), ("whitespaces", 1)];
+    for (word, count) in expected {
+        assert_eq!((word, output.remove(word).unwrap_or(0)), (word, count));
+    }
+    assert_eq!(output.into_iter().collect::<Vec<_>>(), vec![]);
+}
+
+#[test]
+fn alternating_word_separators_not_detected_as_a_word() {
+    let input = ",\n,one,\n ,two \n 'three'";
+    let mut output = word_count(input);
+    let expected = [("one", 1), ("two", 1), ("three", 1)];
+    for (word, count) in expected {
+        assert_eq!((word, output.remove(word).unwrap_or(0)), (word, count));
+    }
+    assert_eq!(output.into_iter().collect::<Vec<_>>(), vec![]);
+}
+
+#[test]
+fn quotation_for_word_with_apostrophe() {
+    let input = "can, can't, 'can't'";
+    let mut output = word_count(input);
+    let expected = [("can", 1), ("can't", 2)];
+    for (word, count) in expected {
+        assert_eq!((word, output.remove(word).unwrap_or(0)), (word, count));
+    }
+    assert_eq!(output.into_iter().collect::<Vec<_>>(), vec![]);
 }
