@@ -65,9 +65,7 @@ pub fn palindrome_products(min: u64, max: u64) -> Option<(Palindrome, Palindrome
         .flat_map(|i| (i..=max).map(move |j| (i * j, (i, j))))
         .filter(|(p, _)| p.is_palindrome())
     {
-        if !map.contains_key(&p) {
-            map.insert(p, Palindrome::from_tfd(i, j));
-        }
+        map.entry(p).or_insert_with(|| Palindrome::from_tfd(i, j));
     }
 
     // then find the potential min and max among them.

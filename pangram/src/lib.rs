@@ -15,7 +15,7 @@ fn count_alphabet(input: &str) -> HashMap<char, usize> {
         })
         .filter(|chr| chr.is_alphabetic())
         .for_each(|chr| {
-            map.insert(chr, map[&chr] + 1);
+            *map.entry(chr).or_default() += 1;
         });
 
     map

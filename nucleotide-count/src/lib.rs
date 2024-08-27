@@ -27,7 +27,7 @@ pub fn nucleotide_counts(dna: &str) -> Result<HashMap<char, usize>, char> {
         if !NUCLEOTIDES.contains(chr) {
             return Err(chr);
         } else {
-            map.insert(chr, map.get(&chr).unwrap() + 1);
+            *map.entry(chr).or_default() += 1;
         }
     }
 

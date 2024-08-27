@@ -9,13 +9,7 @@ pub fn check(candidate: &str) -> bool {
         .map(|c| c.to_ascii_lowercase())
         .filter(|c| c.is_alphabetic())
     {
-        map.insert(
-            chr,
-            match map.get(&chr) {
-                Some(&count) => count,
-                None => 0,
-            } + 1,
-        );
+        *map.entry(chr).or_default() += 1;
     }
 
     // Return true iff all counts are exactly one.

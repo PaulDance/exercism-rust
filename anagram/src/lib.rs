@@ -7,13 +7,7 @@ pub fn chars_freqs(word: &str) -> HashMap<char, u32> {
     let mut freqs = HashMap::new();
 
     for chr in word.chars() {
-        freqs.insert(
-            chr,
-            match freqs.get(&chr) {
-                Some(n) => n + 1,
-                None => 1,
-            },
-        );
+        *freqs.entry(chr).or_default() += 1;
     }
 
     freqs
