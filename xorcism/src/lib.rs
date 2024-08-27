@@ -42,10 +42,10 @@ impl<'k> Xorcism<'k> {
     ///
     /// Note that this is stateful: repeated calls are likely to produce
     /// different results, even with identical inputs, as the key is rotated.
-    pub fn munge<'d, I, D>(&'d mut self, data: I) -> impl Iterator<Item = u8> + 'd
+    pub fn munge<'d, I>(&'d mut self, data: I) -> impl Iterator<Item = u8> + 'd
     where
-        D: Borrow<u8>,
-        I: IntoIterator<Item = D>,
+        I: IntoIterator,
+        <I as IntoIterator>::Item: Borrow<u8>,
         <I as IntoIterator>::IntoIter: 'd,
         'k: 'd,
     {
