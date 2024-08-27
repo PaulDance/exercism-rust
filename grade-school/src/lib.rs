@@ -1,4 +1,4 @@
-use std::collections::{btree_map::BTreeMap, btree_set::BTreeSet};
+use std::collections::{BTreeMap, BTreeSet};
 
 pub struct School {
     map: BTreeMap<u32, BTreeSet<String>>,
@@ -12,27 +12,23 @@ impl School {
     }
 
     pub fn add(&mut self, grade: u32, student: &str) {
-        let student = student.to_string();
-
-        match self.map.get_mut(&grade) {
-            None => {
-                let mut set = BTreeSet::new();
-                set.insert(student);
-                self.map.insert(grade, set);
-            }
-            Some(students) => {
-                students.insert(student);
-            }
+        // Reject already-recorded students.
+        if !self.map.values().any(|students| students.contains(student)) {
+            self.map
+                .entry(grade)
+                .or_default()
+                .insert(student.to_string());
         }
     }
 
     pub fn grades(&self) -> Vec<u32> {
-        self.map.keys().map(|&n| n).collect()
+        self.map.keys().copied().collect()
     }
 
-    pub fn grade(&self, grade: u32) -> Option<Vec<String>> {
+    pub fn grade(&self, grade: u32) -> Vec<&str> {
         self.map
             .get(&grade)
-            .map(|students| students.iter().map(|s| s.clone()).collect())
+            .map(|students| students.iter().map(String::as_str).collect())
+            .unwrap_or_default()
     }
 }
