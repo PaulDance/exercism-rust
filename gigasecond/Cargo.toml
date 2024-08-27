@@ -4,6 +4,6 @@ name = "gigasecond"
 version = "2.0.0"
 
 [dependencies]
-time = "=0.3.25"
-serde = "=1.0.183"
-deranged = "=0.3.7"
+time = "=0.3.36"
+serde = "=1.0.208"
+deranged = "=0.3.11"
