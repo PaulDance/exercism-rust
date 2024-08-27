@@ -1,51 +1,28 @@
 use knapsack::*;
 
 #[test]
-fn test_example_knapsack() {
-    let max_weight = 10;
-    let items = [
-        Item {
-            weight: 5,
-            value: 10,
-        },
-        Item {
-            weight: 4,
-            value: 40,
-        },
-        Item {
-            weight: 6,
-            value: 30,
-        },
-        Item {
-            weight: 4,
-            value: 50,
-        },
-    ];
-
-    assert_eq!(maximum_value(max_weight, &items), 90);
-}
-
-#[test]
-fn test_no_items() {
+fn no_items() {
     let max_weight = 100;
     let items = [];
-
-    assert_eq!(maximum_value(max_weight, &items), 0);
+    let output = maximum_value(max_weight, &items);
+    let expected = 0;
+    assert_eq!(output, expected);
 }
 
 #[test]
-fn test_one_item_too_heavy() {
+fn one_item_too_heavy() {
     let max_weight = 10;
     let items = [Item {
         weight: 100,
         value: 1,
     }];
-
-    assert_eq!(maximum_value(max_weight, &items), 0);
+    let output = maximum_value(max_weight, &items);
+    let expected = 0;
+    assert_eq!(output, expected);
 }
 
 #[test]
-fn test_five_items_cannot_be_greedy_by_weight() {
+fn five_items_cannot_be_greedy_by_weight() {
     let max_weight = 10;
     let items = [
         Item {
@@ -69,12 +46,13 @@ fn test_five_items_cannot_be_greedy_by_weight() {
             value: 21,
         },
     ];
-
-    assert_eq!(maximum_value(max_weight, &items), 21);
+    let output = maximum_value(max_weight, &items);
+    let expected = 21;
+    assert_eq!(output, expected);
 }
 
 #[test]
-fn test_five_items_cannot_be_greedy_by_value() {
+fn five_items_cannot_be_greedy_by_value() {
     let max_weight = 10;
     let items = [
         Item {
@@ -98,8 +76,35 @@ fn test_five_items_cannot_be_greedy_by_value() {
             value: 50,
         },
     ];
+    let output = maximum_value(max_weight, &items);
+    let expected = 80;
+    assert_eq!(output, expected);
+}
 
-    assert_eq!(maximum_value(max_weight, &items), 80);
+#[test]
+fn example_knapsack() {
+    let max_weight = 10;
+    let items = [
+        Item {
+            weight: 5,
+            value: 10,
+        },
+        Item {
+            weight: 4,
+            value: 40,
+        },
+        Item {
+            weight: 6,
+            value: 30,
+        },
+        Item {
+            weight: 4,
+            value: 50,
+        },
+    ];
+    let output = maximum_value(max_weight, &items);
+    let expected = 90;
+    assert_eq!(output, expected);
 }
 
 #[test]
@@ -139,8 +144,9 @@ fn test_8_items() {
             value: 5,
         },
     ];
-
-    assert_eq!(maximum_value(max_weight, &items), 900);
+    let output = maximum_value(max_weight, &items);
+    let expected = 900;
+    assert_eq!(output, expected);
 }
 
 #[test]
@@ -208,6 +214,7 @@ fn test_15_items() {
             value: 240,
         },
     ];
-
-    assert_eq!(maximum_value(max_weight, &items), 1458);
+    let output = maximum_value(max_weight, &items);
+    let expected = 1458;
+    assert_eq!(output, expected);
 }
