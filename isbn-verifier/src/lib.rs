@@ -1,15 +1,18 @@
 /// Determines whether the supplied string is a valid ISBN number
 pub fn is_valid_isbn(isbn: &str) -> bool {
-    if isbn.len() == 0 {
+    if isbn.is_empty() {
         false
     } else {
         let last = isbn.chars().last().unwrap();
 
-        if !last.is_digit(10) && last != 'X' {
+        if !last.is_digit(10) && last != 'X'
+            || isbn[..isbn.len() - 1]
+                .chars()
+                .any(|chr| chr != '-' && !chr.is_digit(10))
+        {
             false
         } else {
-            let no_dashes = isbn[..isbn.len() - 1].replace(|chr: char| !chr.is_digit(10), "")
-                + last.to_string().as_str();
+            let no_dashes = isbn[..isbn.len() - 1].replace('-', "") + last.to_string().as_str();
 
             if no_dashes.len() != 10 {
                 false
