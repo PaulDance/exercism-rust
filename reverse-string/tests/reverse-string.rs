@@ -55,7 +55,7 @@ fn test_wide_characters() {
 }
 
 #[test]
-#[cfg(feature = "grapheme")]
+#[cfg(feature = "graphemes")]
 /// grapheme clusters
 fn test_grapheme_clusters() {
     process_reverse_case("uüu", "uüu");
