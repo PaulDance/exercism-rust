@@ -23,9 +23,5 @@ fn count_alphabet(input: &str) -> HashMap<char, usize> {
 
 /// Determine whether a sentence is a pangram.
 pub fn is_pangram(sentence: &str) -> bool {
-    if sentence.len() == 0 {
-        false
-    } else {
-        count_alphabet(sentence).values().all(|&n| n > 0)
-    }
+    !sentence.is_empty() && count_alphabet(sentence).values().all(|&n| n > 0)
 }
